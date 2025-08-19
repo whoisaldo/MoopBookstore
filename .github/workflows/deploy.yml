@@ -59,7 +59,7 @@ jobs:
     - name: 🔧 Build client for production
       run: |
         cd client
-        echo "REACT_APP_API_URL=https://your-heroku-app-name.herokuapp.com/api" > .env.production
+        echo "REACT_APP_API_URL=https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api" > .env.production
         npm run build
         
     - name: 🚀 Deploy to GitHub Pages
@@ -84,11 +84,11 @@ jobs:
       uses: akhileshns/heroku-deploy@v3.12.12
       with:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-        heroku_app_name: "your-heroku-app-name" # Replace with your Heroku app name
-        heroku_email: "your-email@example.com" # Replace with your Heroku email
+        heroku_app_name: "moops-bookstore-api" # Your Heroku app name
+        heroku_email: "whois.younes@gmail.com" # Your Heroku email
         
     - name: ✅ Deployment complete
       run: |
         echo "🎉 Moops Bookstore deployed successfully!"
         echo "Frontend: https://${{ github.repository_owner }}.github.io/MoopsBookstore"
-        echo "Backend: https://your-heroku-app-name.herokuapp.com"
+        echo "Backend: https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com"
