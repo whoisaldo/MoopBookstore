@@ -1,0 +1,37 @@
+{
+  "name": "Moops Bookstore",
+  "description": "A social book tracking platform",
+  "repository": "https://github.com/your-username/moops-bookstore",
+  "keywords": ["node", "express", "react", "books", "social"],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "NODE_ENV": {
+      "description": "Environment mode",
+      "value": "production"
+    },
+    "JWT_SECRET": {
+      "description": "Secret key for JWT tokens",
+      "generator": "secret"
+    },
+    "MONGODB_URI": {
+      "description": "MongoDB connection string (optional - app works without it)",
+      "required": false
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "hobby"
+    }
+  },
+  "addons": [
+    {
+      "plan": "mongolab:sandbox",
+      "as": "MONGO"
+    }
+  ]
+}

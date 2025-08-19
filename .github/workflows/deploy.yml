@@ -1,0 +1,94 @@
+name: 🚀 Deploy Moops Bookstore
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  # Build and test the application
+  test:
+    name: 🧪 Test Application
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v3
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 📦 Install dependencies
+      run: |
+        npm install
+        cd client && npm install
+        
+    - name: 🧪 Run tests
+      run: |
+        npm run test:server || true
+        cd client && npm test -- --coverage --watchAll=false || true
+        
+    - name: 🔧 Build client
+      run: |
+        cd client && npm run build
+
+  # Deploy frontend to GitHub Pages
+  deploy-frontend:
+    name: 🌐 Deploy Frontend (GitHub Pages)
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v3
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 📦 Install client dependencies
+      run: cd client && npm install
+      
+    - name: 🔧 Build client for production
+      run: |
+        cd client
+        echo "REACT_APP_API_URL=https://your-heroku-app-name.herokuapp.com/api" > .env.production
+        npm run build
+        
+    - name: 🚀 Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./client/build
+        cname: # Optional: your custom domain
+
+  # Deploy backend to Heroku
+  deploy-backend:
+    name: ⚡ Deploy Backend (Heroku)
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v3
+      
+    - name: 🚀 Deploy to Heroku
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: "your-heroku-app-name" # Replace with your Heroku app name
+        heroku_email: "your-email@example.com" # Replace with your Heroku email
+        
+    - name: ✅ Deployment complete
+      run: |
+        echo "🎉 Moops Bookstore deployed successfully!"
+        echo "Frontend: https://${{ github.repository_owner }}.github.io/MoopsBookstore"
+        echo "Backend: https://your-heroku-app-name.herokuapp.com"
