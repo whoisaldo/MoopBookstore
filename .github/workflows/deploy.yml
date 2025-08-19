@@ -1,94 +1,37 @@
-name: 🚀 Deploy Moops Bookstore
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
 
 jobs:
-  # Build and test the application
-  test:
-    name: 🧪 Test Application
+  deploy:
     runs-on: ubuntu-latest
     
     steps:
-    - name: 📥 Checkout code
+    - name: Checkout
       uses: actions/checkout@v3
       
-    - name: 📦 Setup Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18'
         cache: 'npm'
+        cache-dependency-path: client/package-lock.json
         
-    - name: 📦 Install dependencies
+    - name: Install dependencies
       run: |
-        npm install
-        cd client && npm install
+        cd client
+        npm ci
         
-    - name: 🧪 Run tests
-      run: |
-        npm run test:server || true
-        cd client && npm test -- --coverage --watchAll=false || true
-        
-    - name: 🔧 Build client
-      run: |
-        cd client && npm run build
-
-  # Deploy frontend to GitHub Pages
-  deploy-frontend:
-    name: 🌐 Deploy Frontend (GitHub Pages)
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-    
-    steps:
-    - name: 📥 Checkout code
-      uses: actions/checkout@v3
-      
-    - name: 📦 Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: 📦 Install client dependencies
-      run: cd client && npm install
-      
-    - name: 🔧 Build client for production
+    - name: Build
       run: |
         cd client
         echo "REACT_APP_API_URL=https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api" > .env.production
         npm run build
         
-    - name: 🚀 Deploy to GitHub Pages
+    - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./client/build
-        cname: # Optional: your custom domain
-
-  # Deploy backend to Heroku
-  deploy-backend:
-    name: ⚡ Deploy Backend (Heroku)
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-    
-    steps:
-    - name: 📥 Checkout code
-      uses: actions/checkout@v3
-      
-    - name: 🚀 Deploy to Heroku
-      uses: akhileshns/heroku-deploy@v3.12.12
-      with:
-        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-        heroku_app_name: "moops-bookstore-api" # Your Heroku app name
-        heroku_email: "whois.younes@gmail.com" # Your Heroku email
-        
-    - name: ✅ Deployment complete
-      run: |
-        echo "🎉 Moops Bookstore deployed successfully!"
-        echo "Frontend: https://${{ github.repository_owner }}.github.io/MoopsBookstore"
-        echo "Backend: https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com"
