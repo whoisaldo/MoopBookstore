@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   AppBar,
   Toolbar,
-  Typography,
   Button,
   IconButton,
   Avatar,
@@ -15,8 +14,6 @@ import {
 } from '@mui/material';
 import {
   Search as SearchIcon,
-  AccountCircle,
-  Book as BookIcon,
   Dashboard as DashboardIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';

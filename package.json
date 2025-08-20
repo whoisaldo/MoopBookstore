@@ -17,24 +17,31 @@
     "test:server": "echo \"No server tests yet\" && exit 0",
     "deploy:frontend": "cd client && npm run build",
     "deploy:backend": "git push heroku main",
-    "deploy:all": "npm run deploy:frontend && npm run deploy:backend"
+    "deploy:all": "npm run deploy:frontend && npm run deploy:backend",
+    "deploy:pages": "cd client && echo 'REACT_APP_API_URL=https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api' > .env.production && npm run build && npx gh-pages -d build"
   },
   "dependencies": {
-    "express": "^4.18.2",
+    "axios": "^1.5.0",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "mongoose": "^7.5.0",
-    "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
+    "express": "^4.18.2",
     "express-validator": "^7.0.1",
-    "multer": "^1.4.5-lts.1",
-    "axios": "^1.5.0"
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.5.0",
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1",
-    "concurrently": "^8.2.1"
+    "concurrently": "^8.2.1",
+    "gh-pages": "^6.3.0",
+    "nodemon": "^3.0.1"
   },
-  "keywords": ["books", "social", "tracking", "reading"],
+  "keywords": [
+    "books",
+    "social",
+    "tracking",
+    "reading"
+  ],
   "author": "Moops Bookstore",
   "license": "MIT"
 }

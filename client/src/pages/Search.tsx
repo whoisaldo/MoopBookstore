@@ -30,7 +30,6 @@ import { Search as SearchIcon } from '@mui/icons-material';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useBooks, Book } from '../contexts/BookContext';
 import { useAuth } from '../contexts/AuthContext';
-import axios from 'axios';
 import apiClient from '../utils/api';
 
 interface TabPanelProps {

@@ -21,7 +21,7 @@ const corsOptions = {
     const allowedOrigins = [
       'http://localhost:3000',
       'http://localhost:3001',
-      'https://yourusername.github.io', // Replace with your GitHub username
+      'https://whoisaldo.github.io',
       process.env.FRONTEND_URL
     ].filter(Boolean);
     

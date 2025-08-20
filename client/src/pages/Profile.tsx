@@ -57,7 +57,7 @@ const Profile: React.FC = () => {
   const { username } = useParams<{ username: string }>();
   const navigate = useNavigate();
   const { user: currentUser } = useAuth();
-  const { getUserReviews } = useBooks();
+  // getUserReviews is available from useBooks but not used in this component
   
   const [profileUser, setProfileUser] = useState<UserProfile | null>(null);
   const [userStats, setUserStats] = useState<UserStats | null>(null);

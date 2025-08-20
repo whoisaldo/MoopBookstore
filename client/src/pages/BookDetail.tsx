@@ -31,7 +31,6 @@ import Grid from '../components/CustomGrid';
 import {
   Add,
   Edit,
-  Star,
   CalendarToday,
   LibraryBooks,
 } from '@mui/icons-material';
