@@ -295,7 +295,7 @@ router.post('/', auth, [
   }
 });
 
-// Get trending books (alias for trending/popular) - FIXED
+// Get trending books (alias for trending/popular) - RESTARTED
 router.get('/trending', async (req, res) => {
   try {
     const { limit = 20 } = req.query;
