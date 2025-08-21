@@ -76,6 +76,48 @@ router.get('/search', [
   }
 });
 
+// Get trending books
+router.get('/trending', async (req, res) => {
+  try {
+    res.json([
+      {
+        _id: '1',
+        title: 'The Great Gatsby',
+        author: 'F. Scott Fitzgerald',
+        description: 'A classic American novel set in the Jazz Age.',
+        coverImage: 'https://covers.openlibrary.org/b/isbn/9780743273565-M.jpg',
+        averageRating: 4.2,
+        ratingsCount: 1250,
+        genres: ['Fiction', 'Classic', 'Literature']
+      }
+    ]);
+  } catch (error) {
+    console.error('Get trending books error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get recent books
+router.get('/recent', async (req, res) => {
+  try {
+    res.json([
+      {
+        _id: '4',
+        title: 'The Midnight Library',
+        author: 'Matt Haig',
+        description: 'A novel about infinite possibilities and infinite regret.',
+        coverImage: 'https://covers.openlibrary.org/b/isbn/9780525559474-M.jpg',
+        averageRating: 4.1,
+        ratingsCount: 890,
+        genres: ['Fiction', 'Fantasy', 'Philosophy']
+      }
+    ]);
+  } catch (error) {
+    console.error('Get recent books error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Get book details
 router.get('/:id', async (req, res) => {
   try {
