@@ -298,50 +298,19 @@ router.post('/', auth, [
 // Get trending books (alias for trending/popular) - RESTARTED
 router.get('/trending', async (req, res) => {
   try {
-    const { limit = 20 } = req.query;
-    
-    // Mock data when database is not available
-    if (!req.app.locals.isDBConnected || !req.app.locals.isDBConnected()) {
-      const mockBooks = [
-        {
-          _id: '1',
-          title: 'The Great Gatsby',
-          author: 'F. Scott Fitzgerald',
-          description: 'A classic American novel set in the Jazz Age.',
-          coverImage: 'https://covers.openlibrary.org/b/isbn/9780743273565-M.jpg',
-          averageRating: 4.2,
-          ratingsCount: 1250,
-          genres: ['Fiction', 'Classic', 'Literature']
-        },
-        {
-          _id: '2',
-          title: 'To Kill a Mockingbird',
-          author: 'Harper Lee',
-          description: 'A gripping tale of racial injustice and childhood innocence.',
-          coverImage: 'https://covers.openlibrary.org/b/isbn/9780061120084-M.jpg',
-          averageRating: 4.5,
-          ratingsCount: 2100,
-          genres: ['Fiction', 'Classic', 'Drama']
-        },
-        {
-          _id: '3',
-          title: '1984',
-          author: 'George Orwell',
-          description: 'A dystopian social science fiction novel.',
-          coverImage: 'https://covers.openlibrary.org/b/isbn/9780451524935-M.jpg',
-          averageRating: 4.4,
-          ratingsCount: 1800,
-          genres: ['Fiction', 'Dystopian', 'Science Fiction']
-        }
-      ];
-      return res.json(mockBooks.slice(0, parseInt(limit)));
-    }
-
-    const books = await Book.find({})
-      .sort({ ratingsCount: -1, averageRating: -1 })
-      .limit(parseInt(limit));
-
-    res.json(books);
+    // Simple test response first
+    res.json([
+      {
+        _id: '1',
+        title: 'The Great Gatsby',
+        author: 'F. Scott Fitzgerald',
+        description: 'A classic American novel set in the Jazz Age.',
+        coverImage: 'https://covers.openlibrary.org/b/isbn/9780743273565-M.jpg',
+        averageRating: 4.2,
+        ratingsCount: 1250,
+        genres: ['Fiction', 'Classic', 'Literature']
+      }
+    ]);
   } catch (error) {
     console.error('Get trending books error:', error);
     res.status(500).json({ message: 'Server error' });
