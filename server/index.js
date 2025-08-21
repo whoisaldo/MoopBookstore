@@ -52,11 +52,13 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       maxPoolSize: 10, // Maintain up to 10 socket connections
-      serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+      serverSelectionTimeoutMS: 10000, // Keep trying to send operations for 10 seconds
       socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
       family: 4, // Use IPv4, skip trying IPv6
       retryWrites: true,
-      w: 'majority'
+      w: 'majority',
+      heartbeatFrequencyMS: 10000, // Check connection every 10 seconds
+      maxIdleTimeMS: 30000, // Close connections after 30 seconds of inactivity
     };
 
     const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/moops-bookstore';
@@ -65,6 +67,23 @@ const connectDB = async () => {
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
     console.log(`📊 Database: ${conn.connection.name}`);
     isDBConnected = true;
+    
+    // Handle connection events
+    conn.connection.on('error', (err) => {
+      console.error('❌ MongoDB connection error:', err);
+      isDBConnected = false;
+    });
+    
+    conn.connection.on('disconnected', () => {
+      console.log('⚠️ MongoDB disconnected');
+      isDBConnected = false;
+    });
+    
+    conn.connection.on('reconnected', () => {
+      console.log('🔄 MongoDB reconnected');
+      isDBConnected = true;
+    });
+    
   } catch (error) {
     console.error('❌ Database connection error:', error);
     if (process.env.NODE_ENV === 'production') {
@@ -83,6 +102,18 @@ connectDB();
 
 // Export isDBConnected for use in routes
 app.locals.isDBConnected = () => isDBConnected;
+
+// Periodic database reconnection attempt (every 5 minutes)
+setInterval(async () => {
+  if (!isDBConnected) {
+    console.log('🔄 Attempting to reconnect to database...');
+    try {
+      await connectDB();
+    } catch (error) {
+      console.log('❌ Reconnection attempt failed, continuing with mock data');
+    }
+  }
+}, 5 * 60 * 1000); // 5 minutes
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

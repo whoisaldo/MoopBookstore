@@ -31,7 +31,7 @@ const MoopsLogo: React.FC<MoopsLogoProps> = ({ size = 'medium', showText = true 
       {/* Your actual Moops logo image */}
       <Box
         component="img"
-        src="/MoopsBookstore.png"
+        src="./MoopsBookstore.png"
         alt="Moops Bookstore Logo"
         sx={{
           width: logoSize.width,

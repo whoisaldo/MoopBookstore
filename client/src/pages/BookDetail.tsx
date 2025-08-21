@@ -173,7 +173,7 @@ const BookDetail: React.FC = () => {
           <Card>
             <Box sx={{ p: 2, textAlign: 'center' }}>
               <img
-                src={book.coverImage || '/placeholder-book.jpg'}
+                src={book.coverImage || './MoopsBookstore.png'}
                 alt={book.title}
                 style={{
                   maxWidth: '100%',

@@ -67,7 +67,7 @@ const Home: React.FC = () => {
       <CardMedia
         component="img"
         height="200"
-        image={book.coverImage || '/placeholder-book.jpg'}
+                      image={book.coverImage || './MoopsBookstore.png'}
         alt={book.title}
         sx={{ objectFit: 'contain', p: 1 }}
       />
