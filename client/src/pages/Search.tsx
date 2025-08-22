@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Container,
   Typography,
@@ -57,7 +57,7 @@ function TabPanel(props: TabPanelProps) {
 const Search: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { searchBooks, loading, error, addReview } = useBooks();
+  const { searchBooks, loading, error } = useBooks();
   const { user } = useAuth();
   
   const [query, setQuery] = useState(searchParams.get('q') || '');
@@ -75,15 +75,7 @@ const Search: React.FC = () => {
     reviewText: '',
   });
 
-  useEffect(() => {
-    const q = searchParams.get('q');
-    if (q && q.trim()) {
-      setQuery(q);
-      handleSearch(q);
-    }
-  }, [searchParams]);
-
-  const handleSearch = async (searchQuery?: string) => {
+  const handleSearch = useCallback(async (searchQuery?: string) => {
     const queryToSearch = searchQuery || query;
     if (!queryToSearch.trim()) return;
 
@@ -93,7 +85,15 @@ const Search: React.FC = () => {
     
     // Update URL
     setSearchParams({ q: queryToSearch.trim() });
-  };
+  }, [query, searchBooks, setSearchParams]);
+
+  useEffect(() => {
+    const q = searchParams.get('q');
+    if (q && q.trim()) {
+      setQuery(q);
+      handleSearch(q);
+    }
+  }, [searchParams, handleSearch]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

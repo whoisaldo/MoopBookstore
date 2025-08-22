@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Container,
   Typography,
@@ -26,7 +26,6 @@ import {
   VpnKey,
   Delete,
   Person,
-  Email,
   AdminPanelSettings
 } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -68,21 +67,7 @@ const AdminUserDetail: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
   const [deleteDialog, setDeleteDialog] = useState(false);
 
-  useEffect(() => {
-    if (!currentUser || !isAdmin) {
-      navigate('/');
-      return;
-    }
-    
-    if (!userId) {
-      navigate('/admin');
-      return;
-    }
-    
-    loadUserData();
-  }, [currentUser, isAdmin, userId, navigate]);
-
-  const loadUserData = async () => {
+  const loadUserData = useCallback(async () => {
     if (!userId) return;
     
     try {
@@ -100,7 +85,21 @@ const AdminUserDetail: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId, fetchUserById]);
+
+  useEffect(() => {
+    if (!currentUser || !isAdmin) {
+      navigate('/');
+      return;
+    }
+    
+    if (!userId) {
+      navigate('/admin');
+      return;
+    }
+    
+    loadUserData();
+  }, [currentUser, isAdmin, userId, navigate, loadUserData]);
 
   const handleInputChange = (field: keyof AdminUser, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));

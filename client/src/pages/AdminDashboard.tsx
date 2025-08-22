@@ -46,7 +46,6 @@ const AdminDashboard: React.FC = () => {
     loading, 
     error, 
     users, 
-    totalUsers, 
     totalPages, 
     currentPage, 
     stats,

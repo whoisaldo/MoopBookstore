@@ -22,7 +22,8 @@
     "deploy:frontend": "cd client && npm run build",
     "deploy:backend": "git push heroku main",
     "deploy:all": "npm run deploy:frontend && npm run deploy:backend",
-    "deploy:pages": "cd client && echo 'REACT_APP_API_URL=https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api' > .env.production && npm run build && npx gh-pages -d build"
+    "deploy:pages": "cd client && echo 'REACT_APP_API_URL=https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api' > .env.production && npm run build && npx gh-pages -d build",
+    "create-admin": "node scripts/create-admin.js"
   },
   "dependencies": {
     "axios": "^1.5.0",

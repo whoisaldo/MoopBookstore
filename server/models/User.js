@@ -104,8 +104,6 @@ userSchema.methods.getPublicProfile = function() {
   };
 };
 
-<<<<<<< Current (Your changes)
-=======
 // Get admin profile data (includes sensitive info for admins)
 userSchema.methods.getAdminProfile = function() {
   return {
@@ -126,6 +124,4 @@ userSchema.methods.getAdminProfile = function() {
     updatedAt: this.updatedAt
   };
 };
-
->>>>>>> Incoming (Background Agent changes)
 module.exports = mongoose.model('User', userSchema);

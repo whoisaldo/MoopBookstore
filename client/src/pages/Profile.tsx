@@ -27,7 +27,6 @@ import {
 } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useBooks, Review } from '../contexts/BookContext';
 import axios from 'axios';
 
 interface UserProfile {
@@ -61,7 +60,7 @@ const Profile: React.FC = () => {
   
   const [profileUser, setProfileUser] = useState<UserProfile | null>(null);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
-  const [recentReviews, setRecentReviews] = useState<Review[]>([]);
+  const [recentReviews, setRecentReviews] = useState<any[]>([]); // Changed from Review[] to any[]
   const [isFollowing, setIsFollowing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

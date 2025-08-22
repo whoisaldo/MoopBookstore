@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 import { createApiClient } from '../utils/api';
 
@@ -47,7 +47,7 @@ interface AdminContextType {
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -59,7 +59,7 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const api = createApiClient();
   const isAdmin = Boolean(user && (user as any).isAdmin);
 
-  const fetchUsers = async (page = 1, limit = 10, search = '') => {
+  const fetchUsers = useCallback(async (page = 1, limit = 10, search = '') => {
     if (!isAdmin) return;
     
     try {
@@ -84,9 +84,9 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     } finally {
       setLoading(false);
     }
-  };
+  }, [isAdmin, api]);
 
-  const fetchUserById = async (userId: string): Promise<AdminUser | null> => {
+  const fetchUserById = useCallback(async (userId: string): Promise<AdminUser | null> => {
     if (!isAdmin) return null;
     
     try {
@@ -97,9 +97,9 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       setError(error.response?.data?.message || 'Failed to fetch user');
       return null;
     }
-  };
+  }, [isAdmin, api]);
 
-  const updateUser = async (userId: string, updates: Partial<AdminUser>): Promise<boolean> => {
+  const updateUser = useCallback(async (userId: string, updates: Partial<AdminUser>): Promise<boolean> => {
     if (!isAdmin) return false;
     
     try {
@@ -116,9 +116,9 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       setError(error.response?.data?.message || 'Failed to update user');
       return false;
     }
-  };
+  }, [isAdmin, api]);
 
-  const resetUserPassword = async (userId: string, newPassword: string): Promise<boolean> => {
+  const resetUserPassword = useCallback(async (userId: string, newPassword: string): Promise<boolean> => {
     if (!isAdmin) return false;
     
     try {
@@ -129,9 +129,9 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       setError(error.response?.data?.message || 'Failed to reset password');
       return false;
     }
-  };
+  }, [isAdmin, api]);
 
-  const deleteUser = async (userId: string): Promise<boolean> => {
+  const deleteUser = useCallback(async (userId: string): Promise<boolean> => {
     if (!isAdmin) return false;
     
     try {
@@ -147,9 +147,9 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       setError(error.response?.data?.message || 'Failed to delete user');
       return false;
     }
-  };
+  }, [isAdmin, api]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     if (!isAdmin) return;
     
     try {
@@ -159,14 +159,14 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     } catch (error: any) {
       setError(error.response?.data?.message || 'Failed to fetch stats');
     }
-  };
+  }, [isAdmin, api]);
 
   useEffect(() => {
     if (isAdmin) {
       fetchUsers();
       fetchStats();
     }
-  }, [isAdmin]);
+  }, [isAdmin, fetchUsers, fetchStats]);
 
   const value: AdminContextType = {
     isAdmin,

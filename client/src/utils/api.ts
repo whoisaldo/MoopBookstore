@@ -22,8 +22,8 @@ const detectApiUrl = async (): Promise<string> => {
   }
   
   // Fallback to default
-  console.warn('⚠️ Could not detect API server, using default');
-  return process.env.REACT_APP_API_URL || 'http://localhost:5002/api';
+  console.warn('⚠️ Could not detect API server, using Heroku backend');
+  return process.env.REACT_APP_API_URL || 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
 };
 
 // Get API URL with port detection
@@ -35,7 +35,7 @@ export const getApiUrl = (): string => {
   }
   
   // Use environment variable or fallback
-  return process.env.REACT_APP_API_URL || 'http://localhost:5002/api';
+  return process.env.REACT_APP_API_URL || 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
 };
 
 // Initialize API URL detection
