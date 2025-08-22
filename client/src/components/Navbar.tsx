@@ -137,7 +137,7 @@ const Navbar: React.FC = () => {
               <DashboardIcon />
             </IconButton>
             
-            {(user as any).isAdmin && (
+            {user && (user as any).isAdmin && (
               <IconButton
                 color="inherit"
                 onClick={() => navigate('/admin')}
@@ -202,7 +202,7 @@ const Navbar: React.FC = () => {
           <MenuItem onClick={() => { navigate('/dashboard'); handleMenuClose(); }}>
             Dashboard
           </MenuItem>
-          {(user as any).isAdmin && (
+          {user && (user as any).isAdmin && (
             <MenuItem onClick={() => { navigate('/admin'); handleMenuClose(); }}>
               Admin Panel
             </MenuItem>

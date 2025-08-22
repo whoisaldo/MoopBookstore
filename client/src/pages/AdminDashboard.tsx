@@ -24,7 +24,6 @@ import {
   Pagination,
   Tooltip
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
 import {
   Edit,
   Delete,
@@ -141,8 +140,13 @@ const AdminDashboard: React.FC = () => {
 
       {/* Stats Cards */}
       {stats && (
-        <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid xs={12} sm={6} md={3}>
+        <Box sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
+          gap: 3,
+          mb: 4
+        }}>
+          <Box>
             <Card sx={{ bgcolor: '#FFF8DC', borderLeft: '4px solid #8B4513' }}>
               <CardContent>
                 <Box display="flex" alignItems="center">
@@ -158,8 +162,8 @@ const AdminDashboard: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-          <Grid xs={12} sm={6} md={3}>
+          </Box>
+          <Box>
             <Card sx={{ bgcolor: '#F5E6D3', borderLeft: '4px solid #D2691E' }}>
               <CardContent>
                 <Box display="flex" alignItems="center">
@@ -175,8 +179,8 @@ const AdminDashboard: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-          <Grid xs={12} sm={6} md={3}>
+          </Box>
+          <Box>
             <Card sx={{ bgcolor: '#E6F3FF', borderLeft: '4px solid #4A90E2' }}>
               <CardContent>
                 <Box display="flex" alignItems="center">
@@ -192,8 +196,8 @@ const AdminDashboard: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-          <Grid xs={12} sm={6} md={3}>
+          </Box>
+          <Box>
             <Card sx={{ bgcolor: '#E8F5E8', borderLeft: '4px solid #4CAF50' }}>
               <CardContent>
                 <Box display="flex" alignItems="center">
@@ -209,8 +213,8 @@ const AdminDashboard: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       )}
 
       {/* Search and Controls */}

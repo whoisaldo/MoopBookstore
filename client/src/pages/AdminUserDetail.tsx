@@ -20,7 +20,6 @@ import {
   CardContent,
   Avatar
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
 import {
   ArrowBack,
   Save,
@@ -277,8 +276,12 @@ const AdminUserDetail: React.FC = () => {
           User Information
         </Typography>
         
-        <Grid container spacing={3}>
-          <Grid xs={12} sm={6}>
+        <Box sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+          gap: 3
+        }}>
+          <Box>
             <TextField
               fullWidth
               label="Username"
@@ -286,8 +289,8 @@ const AdminUserDetail: React.FC = () => {
               onChange={(e) => handleInputChange('username', e.target.value)}
               variant="outlined"
             />
-          </Grid>
-          <Grid xs={12} sm={6}>
+          </Box>
+          <Box>
             <TextField
               fullWidth
               label="Email"
@@ -295,8 +298,8 @@ const AdminUserDetail: React.FC = () => {
               onChange={(e) => handleInputChange('email', e.target.value)}
               variant="outlined"
             />
-          </Grid>
-          <Grid xs={12}>
+          </Box>
+          <Box>
             <TextField
               fullWidth
               label="Display Name"
@@ -304,8 +307,8 @@ const AdminUserDetail: React.FC = () => {
               onChange={(e) => handleInputChange('displayName', e.target.value)}
               variant="outlined"
             />
-          </Grid>
-          <Grid xs={12}>
+          </Box>
+          <Box>
             <TextField
               fullWidth
               label="Bio"
@@ -315,8 +318,8 @@ const AdminUserDetail: React.FC = () => {
               onChange={(e) => handleInputChange('bio', e.target.value)}
               variant="outlined"
             />
-          </Grid>
-          <Grid xs={12} sm={6}>
+          </Box>
+          <Box>
             <TextField
               fullWidth
               label="Reading Goal"
@@ -325,8 +328,8 @@ const AdminUserDetail: React.FC = () => {
               onChange={(e) => handleInputChange('readingGoal', parseInt(e.target.value) || 12)}
               variant="outlined"
             />
-          </Grid>
-          <Grid xs={12} sm={6}>
+          </Box>
+          <Box>
             <TextField
               fullWidth
               label="Avatar URL"
@@ -334,8 +337,8 @@ const AdminUserDetail: React.FC = () => {
               onChange={(e) => handleInputChange('avatar', e.target.value)}
               variant="outlined"
             />
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
         <Divider sx={{ my: 3 }} />
 
@@ -343,8 +346,12 @@ const AdminUserDetail: React.FC = () => {
           Permissions & Privacy
         </Typography>
 
-        <Grid container spacing={2}>
-          <Grid xs={12} sm={6}>
+        <Box sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+          gap: 2
+        }}>
+          <Box>
             <FormControlLabel
               control={
                 <Switch
@@ -355,8 +362,8 @@ const AdminUserDetail: React.FC = () => {
               }
               label="Administrator Privileges"
             />
-          </Grid>
-          <Grid xs={12} sm={6}>
+          </Box>
+          <Box>
             <FormControlLabel
               control={
                 <Switch
@@ -367,8 +374,8 @@ const AdminUserDetail: React.FC = () => {
               }
               label="Public Profile"
             />
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
         <Box mt={4} display="flex" justifyContent="space-between">
           <Button
