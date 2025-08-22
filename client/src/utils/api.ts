@@ -2,9 +2,9 @@ import axios from 'axios';
 
 // Function to detect the running API server
 const detectApiUrl = async (): Promise<string> => {
-  // In production, use the environment variable directly
+  // In production, always use the Heroku backend
   if (process.env.NODE_ENV === 'production') {
-    return process.env.REACT_APP_API_URL || 'https://your-heroku-app-name.herokuapp.com/api';
+    return 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
   }
 
   // Development mode - try to detect local server
@@ -21,20 +21,25 @@ const detectApiUrl = async (): Promise<string> => {
     }
   }
   
-  // Fallback to default
-  console.warn('⚠️ Could not detect API server, using Heroku backend');
-  return process.env.REACT_APP_API_URL || 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
+  // Fallback to Heroku backend if no local server found
+  console.warn('⚠️ Could not detect local API server, using Heroku backend');
+  return 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
 };
 
-// Get API URL with port detection
+// Get API URL with proper fallback
 export const getApiUrl = (): string => {
+  // In production, always use Heroku
+  if (process.env.NODE_ENV === 'production') {
+    return 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
+  }
+  
   // Check if we already detected the URL
   const cachedUrl = localStorage.getItem('api_url');
   if (cachedUrl) {
     return cachedUrl;
   }
   
-  // Use environment variable or fallback
+  // Use environment variable or fallback to Heroku
   return process.env.REACT_APP_API_URL || 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
 };
 

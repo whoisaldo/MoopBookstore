@@ -50,7 +50,7 @@ interface UserStats {
   totalBooks: number;
 }
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5002/api';
+const API_URL = process.env.REACT_APP_API_URL || 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
 
 const Profile: React.FC = () => {
   const { username } = useParams<{ username: string }>();

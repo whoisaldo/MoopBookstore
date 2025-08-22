@@ -39,12 +39,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Try multiple ports to handle server port conflicts
 const getApiUrl = () => {
-  // Check if there's a cached working URL
-  const cachedUrl = localStorage.getItem('api_url');
-  if (cachedUrl) return cachedUrl;
-  
-  // Default fallback - server should be on 5002 due to port conflicts
-  return process.env.REACT_APP_API_URL || 'http://localhost:5002/api';
+  return process.env.REACT_APP_API_URL || 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
 };
 
 const API_URL = getApiUrl();
