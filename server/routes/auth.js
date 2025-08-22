@@ -155,9 +155,13 @@ router.post('/login', [
         expiresIn: '7d'
       });
 
+      // Ensure mock user includes admin status
+      const mockUserProfile = { ...mockUser };
+      mockUserProfile.isAdmin = login === 'aliyounes@eternalreverse.com';
+      
       return res.json({
         token,
-        user: mockUser
+        user: mockUserProfile
       });
     }
 
@@ -189,9 +193,13 @@ router.post('/login', [
       expiresIn: '7d'
     });
 
+    // Include admin status in login response
+    const userProfile = user.getPublicProfile();
+    userProfile.isAdmin = user.isAdmin;
+    
     res.json({
       token,
-      user: user.getPublicProfile()
+      user: userProfile
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -202,7 +210,10 @@ router.post('/login', [
 // Get current user
 router.get('/me', auth, async (req, res) => {
   try {
-    res.json(req.user.getPublicProfile());
+    // Include admin status in the response for frontend admin detection
+    const userProfile = req.user.getPublicProfile();
+    userProfile.isAdmin = req.user.isAdmin;
+    res.json(userProfile);
   } catch (error) {
     console.error('Get user error:', error);
     res.status(500).json({ message: 'Server error' });
