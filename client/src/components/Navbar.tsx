@@ -15,6 +15,7 @@ import {
 import {
   Search as SearchIcon,
   Dashboard as DashboardIcon,
+  AdminPanelSettings,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -136,6 +137,16 @@ const Navbar: React.FC = () => {
               <DashboardIcon />
             </IconButton>
             
+            {(user as any).isAdmin && (
+              <IconButton
+                color="inherit"
+                onClick={() => navigate('/admin')}
+                title="Admin Panel"
+              >
+                <AdminPanelSettings />
+              </IconButton>
+            )}
+            
             <IconButton
               size="large"
               edge="end"
@@ -191,6 +202,11 @@ const Navbar: React.FC = () => {
           <MenuItem onClick={() => { navigate('/dashboard'); handleMenuClose(); }}>
             Dashboard
           </MenuItem>
+          {(user as any).isAdmin && (
+            <MenuItem onClick={() => { navigate('/admin'); handleMenuClose(); }}>
+              Admin Panel
+            </MenuItem>
+          )}
           <MenuItem onClick={handleLogout}>
             Logout
           </MenuItem>

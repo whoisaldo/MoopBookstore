@@ -46,6 +46,7 @@ router.post('/register', [
         favoriteGenres: [],
         readingGoal: 12,
         isPublic: true,
+        isAdmin: username === 'admin', // Make 'admin' username an admin in mock mode
         followers: [],
         following: [],
         joinDate: new Date().toISOString()
@@ -138,6 +139,7 @@ router.post('/login', [
         favoriteGenres: ['Fiction'],
         readingGoal: 12,
         isPublic: true,
+        isAdmin: login === 'admin', // Make 'admin' username an admin in mock mode
         followers: [],
         following: [],
         joinDate: new Date().toISOString()
