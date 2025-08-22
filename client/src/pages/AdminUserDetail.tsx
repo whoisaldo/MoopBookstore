@@ -6,7 +6,6 @@ import {
   TextField,
   Button,
   Box,
-  Grid,
   Switch,
   FormControlLabel,
   Chip,
@@ -21,6 +20,7 @@ import {
   CardContent,
   Avatar
 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import {
   ArrowBack,
   Save,

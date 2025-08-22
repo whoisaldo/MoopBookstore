@@ -18,13 +18,13 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Grid,
   Card,
   CardContent,
   Alert,
   Pagination,
   Tooltip
 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import {
   Edit,
   Delete,

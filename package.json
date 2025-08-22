@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "A social book tracking platform",
   "main": "server/index.js",
+  "engines": {
+    "node": "22.x",
+    "npm": "10.x"
+  },
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon server/index.js",
