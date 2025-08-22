@@ -8,6 +8,7 @@ const authRoutes = require('./routes/auth');
 const bookRoutes = require('./routes/books');
 const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users');
+const adminRoutes = require('./routes/admin');
 const auth = require('./middleware/auth');
 
 const app = express();
@@ -132,6 +133,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/admin', adminRoutes);
 
 
 

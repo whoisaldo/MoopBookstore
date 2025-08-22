@@ -60,6 +60,10 @@ const userSchema = new mongoose.Schema({
   joinDate: {
     type: Date,
     default: Date.now
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: true
@@ -100,4 +104,28 @@ userSchema.methods.getPublicProfile = function() {
   };
 };
 
+<<<<<<< Current (Your changes)
+=======
+// Get admin profile data (includes sensitive info for admins)
+userSchema.methods.getAdminProfile = function() {
+  return {
+    _id: this._id,
+    username: this.username,
+    email: this.email,
+    displayName: this.displayName,
+    bio: this.bio,
+    avatar: this.avatar,
+    favoriteGenres: this.favoriteGenres,
+    readingGoal: this.readingGoal,
+    isPublic: this.isPublic,
+    isAdmin: this.isAdmin,
+    followers: this.followers,
+    following: this.following,
+    joinDate: this.joinDate,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt
+  };
+};
+
+>>>>>>> Incoming (Background Agent changes)
 module.exports = mongoose.model('User', userSchema);

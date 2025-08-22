@@ -36,6 +36,7 @@ const auth = async (req, res, next) => {
           favoriteGenres: ['Fiction'],
           readingGoal: 12,
           isPublic: true,
+          isAdmin: decoded.username === 'admin', // Make 'admin' username an admin in mock mode
           followers: [],
           following: [],
           joinDate: new Date().toISOString(),
@@ -50,6 +51,7 @@ const auth = async (req, res, next) => {
               favoriteGenres: this.favoriteGenres,
               readingGoal: this.readingGoal,
               isPublic: this.isPublic,
+              isAdmin: this.isAdmin,
               followers: this.followers,
               following: this.following,
               joinDate: this.joinDate

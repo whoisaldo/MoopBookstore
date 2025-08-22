@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { AuthProvider } from './contexts/AuthContext';
 import { BookProvider } from './contexts/BookContext';
+import { AdminProvider } from './contexts/AdminContext';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -12,6 +13,8 @@ import Profile from './pages/Profile';
 import BookDetail from './pages/BookDetail';
 import Search from './pages/Search';
 import Dashboard from './pages/Dashboard';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminUserDetail from './pages/AdminUserDetail';
 
 const theme = createTheme({
   palette: {
@@ -124,22 +127,26 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AuthProvider>
-        <BookProvider>
-          <Router>
-            <div className="App">
-              <Navbar />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/search" element={<Search />} />
-                <Route path="/profile/:username" element={<Profile />} />
-                <Route path="/book/:id" element={<BookDetail />} />
-              </Routes>
-            </div>
-          </Router>
-        </BookProvider>
+        <AdminProvider>
+          <BookProvider>
+            <Router>
+              <div className="App">
+                <Navbar />
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/search" element={<Search />} />
+                  <Route path="/profile/:username" element={<Profile />} />
+                  <Route path="/book/:id" element={<BookDetail />} />
+                  <Route path="/admin" element={<AdminDashboard />} />
+                  <Route path="/admin/users/:userId" element={<AdminUserDetail />} />
+                </Routes>
+              </div>
+            </Router>
+          </BookProvider>
+        </AdminProvider>
       </AuthProvider>
     </ThemeProvider>
   );
