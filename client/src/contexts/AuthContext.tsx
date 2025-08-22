@@ -11,6 +11,7 @@ interface User {
   favoriteGenres: string[];
   readingGoal: number;
   isPublic: boolean;
+  isAdmin?: boolean;
   followers: string[];
   following: string[];
   joinDate: string;
