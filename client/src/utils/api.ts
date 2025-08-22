@@ -2,8 +2,8 @@ import axios from 'axios';
 
 // Function to detect the running API server
 const detectApiUrl = async (): Promise<string> => {
-  // In production, always use the Heroku backend
-  if (process.env.NODE_ENV === 'production') {
+  // In production or when explicitly set, always use the Heroku backend
+  if (process.env.NODE_ENV === 'production' || process.env.REACT_APP_API_URL) {
     return 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
   }
 
@@ -28,6 +28,11 @@ const detectApiUrl = async (): Promise<string> => {
 
 // Get API URL with proper fallback
 export const getApiUrl = (): string => {
+  // Always prioritize environment variable if set
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+  
   // In production, always use Heroku
   if (process.env.NODE_ENV === 'production') {
     return 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
@@ -39,8 +44,8 @@ export const getApiUrl = (): string => {
     return cachedUrl;
   }
   
-  // Use environment variable or fallback to Heroku
-  return process.env.REACT_APP_API_URL || 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
+  // Final fallback to Heroku backend
+  return 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
 };
 
 // Initialize API URL detection
