@@ -121,6 +121,7 @@ const Search: React.FC = () => {
         handleSearch(q);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]); // Remove handleSearch from dependencies to prevent infinite loop
 
   // Cleanup timeout on unmount
