@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/MoopBookstore/static/css/main.e6c13ad2.css",
-    "main.js": "/MoopBookstore/static/js/main.7807d567.js",
+    "main.js": "/MoopBookstore/static/js/main.d0126b83.js",
     "static/js/453.a3c1d153.chunk.js": "/MoopBookstore/static/js/453.a3c1d153.chunk.js",
     "index.html": "/MoopBookstore/index.html",
     "main.e6c13ad2.css.map": "/MoopBookstore/static/css/main.e6c13ad2.css.map",
-    "main.7807d567.js.map": "/MoopBookstore/static/js/main.7807d567.js.map",
+    "main.d0126b83.js.map": "/MoopBookstore/static/js/main.d0126b83.js.map",
     "453.a3c1d153.chunk.js.map": "/MoopBookstore/static/js/453.a3c1d153.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.7807d567.js"
+    "static/js/main.d0126b83.js"
   ]
 }
