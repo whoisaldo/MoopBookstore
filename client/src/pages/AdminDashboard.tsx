@@ -96,12 +96,13 @@ const AdminDashboard: React.FC = () => {
   }, [isAdmin, loading, fetchStats]);
 
   // Only fetch data once when component mounts and user is admin
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (isAdmin && user) {
       memoizedFetchUsers();
       memoizedFetchStats();
     }
-  }, [isAdmin, user]); // Only depend on admin status and user, not the fetch functions
+  }, [isAdmin, user]); // Intentionally excluding memoized functions to prevent infinite loops
 
   const handleSearch = () => {
     fetchUsers(1, 10, searchTerm);

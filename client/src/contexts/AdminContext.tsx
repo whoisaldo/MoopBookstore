@@ -165,6 +165,7 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   }, [isAdmin, api]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     // Only fetch data when admin status changes or on first load
     if (isAdmin && (!hasInitialized.current || previousIsAdmin.current !== isAdmin)) {
@@ -173,7 +174,7 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       fetchUsers();
       fetchStats();
     }
-  }, [isAdmin]); // Remove fetchUsers and fetchStats from dependencies
+  }, [isAdmin]); // Intentionally excluding fetchUsers and fetchStats to prevent infinite loops
 
   const value: AdminContextType = {
     isAdmin,
