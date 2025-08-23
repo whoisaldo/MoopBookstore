@@ -40,13 +40,19 @@ jobs:
       run: |
         cd client
         npm run build:prod
+        ls -la build/
       env:
         REACT_APP_API_URL: https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api
         DISABLE_ESLINT_PLUGIN: true
         
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+      
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./client/build
-        force_orphan: true
+        path: './client/build'
+        
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
