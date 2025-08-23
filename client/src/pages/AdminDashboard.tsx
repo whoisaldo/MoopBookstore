@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Container,
   Typography,
@@ -52,7 +52,8 @@ const AdminDashboard: React.FC = () => {
     fetchUsers, 
     updateUser, 
     resetUserPassword, 
-    deleteUser 
+    deleteUser,
+    fetchStats
   } = useAdmin();
   
   const navigate = useNavigate();
@@ -80,6 +81,27 @@ const AdminDashboard: React.FC = () => {
       return;
     }
   }, [user, isAdmin, navigate]);
+
+  // Prevent unnecessary re-renders
+  const memoizedFetchUsers = useCallback(() => {
+    if (isAdmin && !loading) {
+      fetchUsers(1, 10, searchTerm);
+    }
+  }, [isAdmin, loading, fetchUsers, searchTerm]);
+
+  const memoizedFetchStats = useCallback(() => {
+    if (isAdmin && !loading) {
+      fetchStats();
+    }
+  }, [isAdmin, loading, fetchStats]);
+
+  // Only fetch data once when component mounts and user is admin
+  useEffect(() => {
+    if (isAdmin && user) {
+      memoizedFetchUsers();
+      memoizedFetchStats();
+    }
+  }, [isAdmin, user]); // Only depend on admin status and user, not the fetch functions
 
   const handleSearch = () => {
     fetchUsers(1, 10, searchTerm);

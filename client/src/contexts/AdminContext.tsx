@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback, useRef } from 'react';
 import { useAuth } from './AuthContext';
 import { createApiClient } from '../utils/api';
 
@@ -55,6 +55,10 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Use refs to track if we've already fetched data
+  const hasInitialized = useRef(false);
+  const previousIsAdmin = useRef(false);
 
   const api = createApiClient();
   const isAdmin = Boolean(user && (user as any).isAdmin);
@@ -162,11 +166,14 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, [isAdmin, api]);
 
   useEffect(() => {
-    if (isAdmin) {
+    // Only fetch data when admin status changes or on first load
+    if (isAdmin && (!hasInitialized.current || previousIsAdmin.current !== isAdmin)) {
+      hasInitialized.current = true;
+      previousIsAdmin.current = isAdmin;
       fetchUsers();
       fetchStats();
     }
-  }, [isAdmin, fetchUsers, fetchStats]);
+  }, [isAdmin]); // Remove fetchUsers and fetchStats from dependencies
 
   const value: AdminContextType = {
     isAdmin,

@@ -35,7 +35,7 @@ router.get('/users', adminAuth, [
         {
           _id: 'mock_admin_1',
           username: 'aliyounes',
-          email: 'aliyounes@eternalreverse.com',
+          email: 'admin@moopsbookstore.com',
           displayName: 'Ali Younes',
           bio: 'System Administrator',
           isAdmin: true,
@@ -101,7 +101,7 @@ router.get('/users/:userId', adminAuth, async (req, res) => {
       const mockUser = {
         _id: userId,
         username: userId === 'mock_admin_1' ? 'aliyounes' : 'demo_user',
-        email: userId === 'mock_admin_1' ? 'aliyounes@eternalreverse.com' : 'demo@example.com',
+        email: userId === 'mock_admin_1' ? 'admin@moopsbookstore.com' : 'demo@example.com',
         displayName: userId === 'mock_admin_1' ? 'Ali Younes' : 'Demo User',
         bio: userId === 'mock_admin_1' ? 'System Administrator' : 'Demo user account',
         isAdmin: userId === 'mock_admin_1',

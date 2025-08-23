@@ -46,7 +46,7 @@ router.post('/register', [
         favoriteGenres: [],
         readingGoal: 12,
         isPublic: true,
-        isAdmin: email === 'aliyounes@eternalreverse.com', // Only this specific email gets admin access
+        isAdmin: email === process.env.ADMIN_EMAIL || 'admin@moopsbookstore.com', // Admin access for configured email
         followers: [],
         following: [],
         joinDate: new Date().toISOString()
@@ -84,7 +84,7 @@ router.post('/register', [
       email,
       password,
       displayName,
-      isAdmin: email === 'aliyounes@eternalreverse.com' // Only this specific email gets admin access
+      isAdmin: email === process.env.ADMIN_EMAIL || 'admin@moopsbookstore.com' // Admin access for configured email
     });
 
     await user.save();
@@ -140,7 +140,7 @@ router.post('/login', [
         favoriteGenres: ['Fiction'],
         readingGoal: 12,
         isPublic: true,
-        isAdmin: login === 'aliyounes@eternalreverse.com', // Only this specific email gets admin access
+        isAdmin: login === process.env.ADMIN_EMAIL || 'admin@moopsbookstore.com', // Admin access for configured email
         followers: [],
         following: [],
         joinDate: new Date().toISOString()
@@ -157,7 +157,7 @@ router.post('/login', [
 
       // Ensure mock user includes admin status
       const mockUserProfile = { ...mockUser };
-      mockUserProfile.isAdmin = login === 'aliyounes@eternalreverse.com';
+              mockUserProfile.isAdmin = login === process.env.ADMIN_EMAIL || 'admin@moopsbookstore.com';
       
       return res.json({
         token,

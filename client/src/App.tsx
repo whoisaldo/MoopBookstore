@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { AuthProvider } from './contexts/AuthContext';
 import { BookProvider } from './contexts/BookContext';
 import { AdminProvider } from './contexts/AdminContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -124,31 +125,33 @@ const theme = createTheme({
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AuthProvider>
-        <AdminProvider>
-          <BookProvider>
-            <Router>
-              <div className="App">
-                <Navbar />
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/search" element={<Search />} />
-                  <Route path="/profile/:username" element={<Profile />} />
-                  <Route path="/book/:id" element={<BookDetail />} />
-                  <Route path="/admin" element={<AdminDashboard />} />
-                  <Route path="/admin/users/:userId" element={<AdminUserDetail />} />
-                </Routes>
-              </div>
-            </Router>
-          </BookProvider>
-        </AdminProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AuthProvider>
+          <AdminProvider>
+            <BookProvider>
+              <Router>
+                <div className="App">
+                  <Navbar />
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/search" element={<Search />} />
+                    <Route path="/profile/:username" element={<Profile />} />
+                    <Route path="/book/:id" element={<BookDetail />} />
+                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/admin/users/:userId" element={<AdminUserDetail />} />
+                  </Routes>
+                </div>
+              </Router>
+            </BookProvider>
+          </AdminProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 

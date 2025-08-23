@@ -1,67 +1,31 @@
 import axios from 'axios';
 
-// Function to detect the running API server
-const detectApiUrl = async (): Promise<string> => {
-  // In production or when explicitly set, always use the Heroku backend
-  if (process.env.NODE_ENV === 'production' || process.env.REACT_APP_API_URL) {
-    return 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
-  }
-
-  // Development mode - try to detect local server
-  const ports = [5002, 5003, 5001, 5000];
-  
-  for (const port of ports) {
-    try {
-      const url = `http://localhost:${port}/api`;
-      await axios.get(`${url}/health`, { timeout: 1000 });
-      console.log(`✅ API server detected on port ${port}`);
-      return url;
-    } catch (error) {
-      // Continue to next port
-    }
-  }
-  
-  // Fallback to Heroku backend if no local server found
-  console.warn('⚠️ Could not detect local API server, using Heroku backend');
-  return 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
-};
-
-// Get API URL with proper fallback
-export const getApiUrl = (): string => {
+// Simplified API URL configuration
+const getApiUrl = (): string => {
   // Always prioritize environment variable if set
   if (process.env.REACT_APP_API_URL) {
     return process.env.REACT_APP_API_URL;
   }
   
-  // In production, always use Heroku
+  // In production (GitHub Pages), always use Heroku backend
   if (process.env.NODE_ENV === 'production') {
     return 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
   }
   
-  // Check if we already detected the URL
-  const cachedUrl = localStorage.getItem('api_url');
-  if (cachedUrl) {
-    return cachedUrl;
-  }
-  
-  // Final fallback to Heroku backend
-  return 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
+  // Development mode - use localhost
+  return 'http://localhost:5002/api';
 };
 
-// Initialize API URL detection
-export const initializeApiUrl = async (): Promise<string> => {
-  const url = await detectApiUrl();
-  localStorage.setItem('api_url', url);
-  return url;
-};
-
-// Create axios instance with dynamic base URL
+// Create axios instance with proper base URL
 export const createApiClient = () => {
   const apiUrl = getApiUrl();
   
   const client = axios.create({
     baseURL: apiUrl,
     timeout: 10000,
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
   
   // Add request interceptor to add auth token
@@ -73,7 +37,20 @@ export const createApiClient = () => {
     return config;
   });
   
+  // Add response interceptor for error handling
+  client.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      // Log errors in development
+      if (process.env.NODE_ENV === 'development') {
+        console.error('API Error:', error);
+      }
+      return Promise.reject(error);
+    }
+  );
+  
   return client;
 };
 
+// Export the default client instance
 export default createApiClient();

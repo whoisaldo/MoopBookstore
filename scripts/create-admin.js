@@ -12,7 +12,7 @@ require('dotenv').config();
 // Import the User model
 const User = require('../server/models/User');
 
-const ADMIN_EMAIL = 'aliyounes@eternalreverse.com';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@moopsbookstore.com';
 const ADMIN_USERNAME = 'aliyounes';
 const ADMIN_PASSWORD = 'admin123'; // Change this to your desired password
 const ADMIN_DISPLAY_NAME = 'Ali Younes';

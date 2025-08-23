@@ -23,6 +23,7 @@ const corsOptions = {
       'http://localhost:3000',
       'http://localhost:3001',
       'https://whoisaldo.github.io',
+      'https://whoisaldo.github.io/MoopBookstore',
       process.env.FRONTEND_URL
     ].filter(Boolean);
     
@@ -185,8 +186,7 @@ server.on('error', (err) => {
     const altServer = app.listen(PORT + 1, () => {
       console.log(`Server is running on port ${PORT + 1}`);
       console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`\n🚀 IMPORTANT: Update your frontend to use: http://localhost:${PORT + 1}/api`);
-      console.log(`Or add REACT_APP_API_URL=http://localhost:${PORT + 1}/api to your .env file\n`);
+      console.log(`Server is running on port ${PORT + 1}`);
     });
   } else {
     console.error('Server error:', err);

@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import axios from 'axios';
 import apiClient from '../utils/api';
 
 export interface Book {
@@ -57,8 +56,6 @@ interface BookContextType {
 
 const BookContext = createContext<BookContextType | undefined>(undefined);
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://moops-bookstore-api-064ad9bcc3f1.herokuapp.com/api';
-
 export const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -68,7 +65,7 @@ export const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setError(null);
       setLoading(true);
       
-      const response = await axios.get(`${API_URL}/books/search`, {
+      const response = await apiClient.get(`/books/search`, {
         params: { q: query }
       });
       
@@ -147,7 +144,7 @@ export const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setError(null);
       setLoading(true);
       
-      const response = await axios.get(`${API_URL}/reviews/book/${bookId}`);
+      const response = await apiClient.get(`/reviews/book/${bookId}`);
       return response.data.reviews;
     } catch (error: any) {
       const message = error.response?.data?.message || 'Failed to get book reviews';
@@ -162,7 +159,7 @@ export const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       setError(null);
       
-      await axios.post(`${API_URL}/reviews/${reviewId}/like`);
+      await apiClient.post(`/reviews/${reviewId}/like`);
       return true;
     } catch (error: any) {
       const message = error.response?.data?.message || 'Failed to like review';
@@ -175,7 +172,7 @@ export const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       setError(null);
       
-      await axios.delete(`${API_URL}/reviews/${reviewId}`);
+      await apiClient.delete(`/reviews/${reviewId}`);
       return true;
     } catch (error: any) {
       const message = error.response?.data?.message || 'Failed to delete review';
@@ -189,7 +186,7 @@ export const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setError(null);
       setLoading(true);
       
-      const response = await axios.get(`${API_URL}/books/trending/popular`);
+      const response = await apiClient.get(`/books/trending/popular`);
       return response.data;
     } catch (error: any) {
       const message = error.response?.data?.message || 'Failed to get trending books';
@@ -205,7 +202,7 @@ export const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setError(null);
       setLoading(true);
       
-      const response = await axios.get(`${API_URL}/books/recent/added`);
+      const response = await apiClient.get(`/books/recent/added`);
       return response.data;
     } catch (error: any) {
       const message = error.response?.data?.message || 'Failed to get recent books';

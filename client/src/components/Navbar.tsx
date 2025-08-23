@@ -20,6 +20,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import MoopsLogo from './MoopsLogo';
+import HealthCheck from './HealthCheck';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -126,6 +127,11 @@ const Navbar: React.FC = () => {
         </Box>
 
         <Box sx={{ flexGrow: 1 }} />
+
+        {/* Health Check Component */}
+        <Box sx={{ mr: 2 }}>
+          <HealthCheck />
+        </Box>
 
         {user ? (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

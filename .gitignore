@@ -2,13 +2,20 @@
 node_modules/
 client/node_modules/
 
-# Environment files
+# Environment files - NEVER commit these
 .env
 .env.local
 .env.development
 .env.test
 .env.production
 env.local
+env.production
+env.example
+server/env.*
+client/env.*
+
+# But allow the template
+!env.template
 
 # Build outputs
 client/build/
@@ -34,15 +41,7 @@ pids
 
 # Coverage directory used by tools like istanbul
 coverage/
-
-# nyc test coverage
 .nyc_output
-
-# Dependency directories
-node_modules/
-
-# dotenv environment variables file
-.env
 
 # IDE files
 .vscode/
@@ -63,6 +62,14 @@ Thumbs.db
 tmp/
 temp/
 
-# Package lock files (optional - comment out if you want to include them)
+# Development and deployment scripts (remove if you don't want them public)
+# scripts/deploy-production.sh
+# scripts/deploy.sh
+
+# Documentation that might expose development details
+# DEPLOYMENT.md
+# QUICK_DEPLOY.md
+
+# Package lock files (keep these for consistent installs)
 # package-lock.json
 # yarn.lock
