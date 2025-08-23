@@ -80,8 +80,22 @@ const Search: React.FC = () => {
     if (!queryToSearch.trim()) return;
 
     setHasSearched(true);
+    console.log('🔍 Frontend: Starting search for:', queryToSearch.trim());
+    
     const results = await searchBooks(queryToSearch.trim());
-    setSearchResults(results);
+    console.log('📚 Frontend: Search results received:', results);
+    
+    // Handle null results gracefully
+    if (results) {
+      setSearchResults(results);
+    } else {
+      setSearchResults({
+        localBooks: [],
+        googleBooks: [],
+        totalLocal: 0,
+        totalGoogle: 0
+      });
+    }
     
     // Update URL
     setSearchParams({ q: queryToSearch.trim() });

@@ -22,57 +22,112 @@ router.get('/search', [
     }
 
     const { q, startIndex = 0, maxResults = 20 } = req.query;
+    console.log('📚 Search request for:', q);
 
     // First search our local database (if available)
     let localBooks = [];
     if (req.app.locals.isDBConnected && req.app.locals.isDBConnected()) {
       try {
+        // Use regex search instead of text search to avoid index issues
         localBooks = await Book.find({
-          $text: { $search: q }
+          $or: [
+            { title: { $regex: q, $options: 'i' } },
+            { author: { $regex: q, $options: 'i' } },
+            { description: { $regex: q, $options: 'i' } }
+          ]
         }).limit(10);
+        console.log('✅ Local search found', localBooks.length, 'books');
       } catch (error) {
-        console.log('Local database search failed, continuing with Google Books only');
+        console.log('⚠️ Local database search failed:', error.message);
         localBooks = [];
       }
+    } else {
+      console.log('⚠️ Database not connected, using mock local books');
+      // Mock local search when DB is not available
+      const mockLocalBooks = [
+        {
+          _id: 'mock_local_1',
+          title: 'Sample Book 1',
+          author: 'Mock Author',
+          description: 'A sample book for testing search functionality',
+          coverImage: 'https://via.placeholder.com/400x600?text=Sample+Book',
+          averageRating: 4.0,
+          ratingsCount: 15,
+          genres: ['Fiction']
+        }
+      ];
+      
+      localBooks = mockLocalBooks.filter(book => 
+        book.title.toLowerCase().includes(q.toLowerCase()) ||
+        book.author.toLowerCase().includes(q.toLowerCase())
+      );
     }
 
-    // Then search Google Books API
-    const googleResponse = await axios.get('https://www.googleapis.com/books/v1/volumes', {
-      params: {
-        q,
-        startIndex,
-        maxResults,
-        fields: 'items(id,volumeInfo(title,authors,description,publishedDate,pageCount,categories,imageLinks,language,publisher,industryIdentifiers))'
-      }
-    });
-
-    const googleBooks = googleResponse.data.items || [];
+    // Then search Google Books API with better error handling
+    let googleBooks = [];
+    let totalGoogle = 0;
     
-    // Format Google Books data
-    const formattedGoogleBooks = googleBooks.map(item => ({
-      googleBooksId: item.id,
-      title: item.volumeInfo.title || 'Unknown Title',
-      author: item.volumeInfo.authors ? item.volumeInfo.authors.join(', ') : 'Unknown Author',
-      description: item.volumeInfo.description || '',
-      publishedDate: item.volumeInfo.publishedDate ? new Date(item.volumeInfo.publishedDate) : null,
-      pageCount: item.volumeInfo.pageCount || 0,
-      genres: item.volumeInfo.categories || [],
-      coverImage: item.volumeInfo.imageLinks?.thumbnail || '',
-      language: item.volumeInfo.language || 'en',
-      publisher: item.volumeInfo.publisher || '',
-      isbn: item.volumeInfo.industryIdentifiers?.find(id => id.type === 'ISBN_13')?.identifier || 
-             item.volumeInfo.industryIdentifiers?.find(id => id.type === 'ISBN_10')?.identifier || ''
-    }));
+    try {
+      console.log('🔍 Searching Google Books API for:', q);
+      
+      const googleResponse = await axios.get('https://www.googleapis.com/books/v1/volumes', {
+        params: {
+          q,
+          startIndex,
+          maxResults,
+          fields: 'totalItems,items(id,volumeInfo(title,authors,description,publishedDate,pageCount,categories,imageLinks,language,publisher,industryIdentifiers))'
+        },
+        timeout: 10000 // 10 second timeout
+      });
 
-    res.json({
-      localBooks,
-      googleBooks: formattedGoogleBooks,
-      totalLocal: localBooks.length,
-      totalGoogle: googleResponse.data.totalItems || 0
-    });
+      googleBooks = googleResponse.data.items || [];
+      totalGoogle = googleResponse.data.totalItems || 0;
+      
+      console.log('✅ Google Books search found', googleBooks.length, 'books');
+      
+      // Format Google Books data
+      const formattedGoogleBooks = googleBooks.map(item => ({
+        googleBooksId: item.id,
+        title: item.volumeInfo.title || 'Unknown Title',
+        author: item.volumeInfo.authors ? item.volumeInfo.authors.join(', ') : 'Unknown Author',
+        description: item.volumeInfo.description || '',
+        publishedDate: item.volumeInfo.publishedDate || null,
+        pageCount: item.volumeInfo.pageCount || 0,
+        genres: item.volumeInfo.categories || [],
+        categories: item.volumeInfo.categories || [],
+        coverImage: item.volumeInfo.imageLinks?.thumbnail?.replace('http:', 'https:') || '',
+        language: item.volumeInfo.language || 'en',
+        publisher: item.volumeInfo.publisher || '',
+        isbn: item.volumeInfo.industryIdentifiers?.find(id => id.type === 'ISBN_13')?.identifier || 
+               item.volumeInfo.industryIdentifiers?.find(id => id.type === 'ISBN_10')?.identifier || ''
+      }));
+
+      res.json({
+        localBooks,
+        googleBooks: formattedGoogleBooks,
+        totalLocal: localBooks.length,
+        totalGoogle
+      });
+      
+    } catch (googleError) {
+      console.error('❌ Google Books API error:', googleError.message);
+      
+      // Return local results even if Google Books fails
+      res.json({
+        localBooks,
+        googleBooks: [],
+        totalLocal: localBooks.length,
+        totalGoogle: 0,
+        warning: 'Google Books search temporarily unavailable'
+      });
+    }
+
   } catch (error) {
-    console.error('Search books error:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('❌ Search books error:', error);
+    res.status(500).json({ 
+      message: 'Search failed', 
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Server error'
+    });
   }
 });
 

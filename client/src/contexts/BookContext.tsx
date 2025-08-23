@@ -65,15 +65,38 @@ export const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setError(null);
       setLoading(true);
       
+      console.log('🔍 Searching for:', query);
       const response = await apiClient.get(`/books/search`, {
-        params: { q: query }
+        params: { q: query },
+        timeout: 15000 // 15 second timeout
       });
       
+      console.log('✅ Search response:', response.data);
       return response.data;
     } catch (error: any) {
-      const message = error.response?.data?.message || 'Search failed';
+      console.error('❌ Search error:', error);
+      
+      let message = 'Search failed';
+      if (error.code === 'ECONNABORTED') {
+        message = 'Search timed out. Please try again.';
+      } else if (error.response?.status === 500) {
+        message = 'Server error. Please try again in a moment.';
+      } else if (error.response?.data?.message) {
+        message = error.response.data.message;
+      } else if (error.message) {
+        message = error.message;
+      }
+      
       setError(message);
-      return null;
+      
+      // Return empty results instead of null to prevent UI issues
+      return {
+        localBooks: [],
+        googleBooks: [],
+        totalLocal: 0,
+        totalGoogle: 0,
+        error: message
+      };
     } finally {
       setLoading(false);
     }
