@@ -273,4 +273,54 @@ router.get('/:userId/following', [
   }
 });
 
+// Update user profile
+router.put('/profile', auth, async (req, res) => {
+  try {
+    const { displayName, bio, avatar, favoriteGenres, readingGoal, isPublic } = req.body;
+    
+    // Validate input
+    if (!displayName || displayName.trim().length === 0) {
+      return res.status(400).json({ message: 'Display name is required' });
+    }
+    
+    if (displayName.length > 50) {
+      return res.status(400).json({ message: 'Display name must be 50 characters or less' });
+    }
+    
+    if (bio && bio.length > 500) {
+      return res.status(400).json({ message: 'Bio must be 500 characters or less' });
+    }
+    
+    if (readingGoal && (readingGoal < 1 || readingGoal > 1000)) {
+      return res.status(400).json({ message: 'Reading goal must be between 1 and 1000' });
+    }
+
+    // Update user profile
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        displayName: displayName.trim(),
+        bio: bio ? bio.trim() : '',
+        avatar: avatar ? avatar.trim() : '',
+        favoriteGenres: Array.isArray(favoriteGenres) ? favoriteGenres : [],
+        readingGoal: readingGoal || 12,
+        isPublic: typeof isPublic === 'boolean' ? isPublic : true
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      message: 'Profile updated successfully',
+      user: updatedUser.getPublicProfile()
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;

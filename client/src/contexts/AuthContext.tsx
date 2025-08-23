@@ -24,6 +24,7 @@ interface AuthContextType {
   register: (userData: RegisterData) => Promise<boolean>;
   logout: () => void;
   updateProfile: (data: Partial<User>) => Promise<boolean>;
+  updateUser: (userData: User) => void;
   loading: boolean;
   error: string | null;
 }
@@ -154,6 +155,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const updateUser = (userData: User) => {
+    setUser(userData);
+  };
+
   const value: AuthContextType = {
     user,
     token,
@@ -161,6 +166,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     register,
     logout,
     updateProfile,
+    updateUser,
     loading,
     error,
   };

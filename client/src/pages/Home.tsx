@@ -27,6 +27,14 @@ const Home: React.FC = () => {
   const [recentBooks, setRecentBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Redirect to landing page if not logged in
+  useEffect(() => {
+    if (!user) {
+      navigate('/');
+      return;
+    }
+  }, [user, navigate]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -132,6 +140,23 @@ const Home: React.FC = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
+      {/* Dashboard Header */}
+      <Box sx={{ textAlign: 'center', mb: 4 }}>
+        <Typography variant="h4" component="h1" sx={{ color: '#8B4513', fontWeight: 'bold', mb: 2 }}>
+          Welcome to Your Reading Dashboard
+        </Typography>
+        <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
+          Discover trending books and recent additions to your library
+        </Typography>
+        <Button
+          variant="outlined"
+          onClick={() => navigate('/')}
+          sx={{ borderColor: '#8B4513', color: '#8B4513' }}
+        >
+          ← Back to Landing Page
+        </Button>
+      </Box>
+
       {/* Hero Section */}
       <Paper
         sx={{

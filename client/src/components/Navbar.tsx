@@ -135,6 +135,13 @@ const Navbar: React.FC = () => {
 
         {user ? (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Button
+              color="inherit"
+              onClick={() => navigate('/home')}
+              sx={{ textTransform: 'none', fontWeight: 500 }}
+            >
+              Home
+            </Button>
             <IconButton
               color="inherit"
               onClick={() => navigate('/dashboard')}
@@ -202,6 +209,9 @@ const Navbar: React.FC = () => {
           open={isMenuOpen}
           onClose={handleMenuClose}
         >
+          <MenuItem onClick={() => { navigate('/home'); handleMenuClose(); }}>
+            Home
+          </MenuItem>
           <MenuItem onClick={() => { navigate(`/profile/${user?.username}`); handleMenuClose(); }}>
             Profile
           </MenuItem>

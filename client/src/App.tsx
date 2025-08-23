@@ -7,9 +7,11 @@ import { BookProvider } from './contexts/BookContext';
 import { AdminProvider } from './contexts/AdminContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import Navbar from './components/Navbar';
+import LandingPage from './pages/LandingPage';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Settings from './pages/Settings';
 import Profile from './pages/Profile';
 import BookDetail from './pages/BookDetail';
 import Search from './pages/Search';
@@ -135,9 +137,11 @@ function App() {
                 <div className="App">
                   <Navbar />
                   <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/home" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/settings" element={<Settings />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/search" element={<Search />} />
                     <Route path="/profile/:username" element={<Profile />} />
