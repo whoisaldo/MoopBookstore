@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Container,
   Typography,
@@ -75,39 +75,62 @@ const Search: React.FC = () => {
     reviewText: '',
   });
 
+  // Add debounce ref to prevent rapid successive searches
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const handleSearch = useCallback(async (searchQuery?: string) => {
     const queryToSearch = searchQuery || query;
     if (!queryToSearch.trim()) return;
 
-    setHasSearched(true);
-    console.log('🔍 Frontend: Starting search for:', queryToSearch.trim());
-    
-    const results = await searchBooks(queryToSearch.trim());
-    console.log('📚 Frontend: Search results received:', results);
-    
-    // Handle null results gracefully
-    if (results) {
-      setSearchResults(results);
-    } else {
-      setSearchResults({
-        localBooks: [],
-        googleBooks: [],
-        totalLocal: 0,
-        totalGoogle: 0
-      });
+    // Clear any existing timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
     }
-    
-    // Update URL
-    setSearchParams({ q: queryToSearch.trim() });
+
+    // Debounce the search to prevent rapid successive calls
+    searchTimeoutRef.current = setTimeout(async () => {
+      setHasSearched(true);
+      console.log('🔍 Frontend: Starting search for:', queryToSearch.trim());
+      
+      const results = await searchBooks(queryToSearch.trim());
+      console.log('📚 Frontend: Search results received:', results);
+      
+      // Handle null results gracefully
+      if (results) {
+        setSearchResults(results);
+      } else {
+        setSearchResults({
+          localBooks: [],
+          googleBooks: [],
+          totalLocal: 0,
+          totalGoogle: 0
+        });
+      }
+      
+      // Update URL
+      setSearchParams({ q: queryToSearch.trim() });
+    }, 500); // 500ms debounce delay
   }, [query, searchBooks, setSearchParams]);
 
   useEffect(() => {
     const q = searchParams.get('q');
-    if (q && q.trim()) {
+    if (q && q.trim() && q !== query) {
       setQuery(q);
-      handleSearch(q);
+      // Only search if the query is different from current state
+      if (!hasSearched || q !== query) {
+        handleSearch(q);
+      }
     }
-  }, [searchParams, handleSearch]);
+  }, [searchParams]); // Remove handleSearch from dependencies to prevent infinite loop
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

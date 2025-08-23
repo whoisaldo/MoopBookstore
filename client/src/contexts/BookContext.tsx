@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
 import apiClient from '../utils/api';
 
 export interface Book {
@@ -60,7 +60,7 @@ export const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const searchBooks = async (query: string) => {
+  const searchBooks = useCallback(async (query: string) => {
     try {
       setError(null);
       setLoading(true);
@@ -100,7 +100,7 @@ export const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // Empty dependency array since it doesn't depend on any state
 
   const getBook = async (id: string): Promise<Book | null> => {
     try {
